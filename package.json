@@ -1,25 +1,21 @@
 {
-  "name": "express-be",
-  "version": "0.0.0",
-  "private": true,
+  "name": "server",
+  "version": "1.0.0",
+  "main": "server.js",
   "scripts": {
-    "deploy": "nodemon ./bin/www",
-    "start": "node ./bin/www"
+    "start": "nodemon server.js"
   },
   "dependencies": {
-    "body-parser": "^1.20.2",
-    "cookie-parser": "~1.4.4",
     "cors": "^2.8.5",
-    "debug": "~2.6.9",
-    "express": "~4.16.1",
-    "http-errors": "~1.6.3",
-    "jsonwebtoken": "^9.0.0",
-    "morgan": "~1.9.1",
-    "mysql2": "^3.1.2",
-    "nodemon": "^2.0.21",
-    "pug": "2.0.0-beta11"
+    "express": "^4.18.2",
+    "mongoose": "^6.10.4"
   },
   "devDependencies": {
-    "prettier": "^2.8.7",
+    "dotenv": "^16.0.3",
+    "eslint": "^8.37.0",
+    "eslint-config-prettier": "^8.5.0",
+    "eslint-plugin-prettier": "^4.2.1",
+    "nodemon": "^2.0.20",
+    "prettier": "^2.7.1"
   }
 }

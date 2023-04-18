@@ -8,7 +8,8 @@ const app = express();
 app.use(cors());
 app.use(express.json({ extended: true }));
 // rout
-app.use("/api/users", require("./src/routes/users"));
+app.use("/api/auth", require("./src/routes/auth"));
+app.use("/api/admin", require("./src/routes/admin"));
 app.use("/api/messages", require("./src/routes/messages"));
 
 const start = async () => {

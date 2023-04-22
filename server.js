@@ -11,6 +11,7 @@ app.use(express.json({ extended: true }));
 app.use("/api/auth", require("./src/routes/auth"));
 app.use("/api/admin", require("./src/routes/admin"));
 app.use("/api/messages", require("./src/routes/messages"));
+app.use("/api/reviews", require("./src/routes/reviews"));
 
 const start = async () => {
   try {
@@ -25,5 +26,5 @@ const start = async () => {
     process.exit(1);
   }
 };
-
+console.log(process.env.PORT);
 start();

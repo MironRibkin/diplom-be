@@ -10,7 +10,6 @@ app.use(express.json({ extended: true }));
 // rout
 app.use("/api/auth", require("./src/routes/auth"));
 app.use("/api/admin", require("./src/routes/admin"));
-app.use("/api/messages", require("./src/routes/messages"));
 app.use("/api/reviews", require("./src/routes/reviews"));
 
 const start = async () => {

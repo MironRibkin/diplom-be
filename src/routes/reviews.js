@@ -33,6 +33,7 @@ router.put(
         req.body;
       const review = await Reviews.create({
         title,
+        author: currentUser.userName,
         recordTitle,
         theme,
         tags,
@@ -62,6 +63,7 @@ router.get("/user/:userId", async (req, res) => {
     return res.json(
       userRecords.map((reviews) => ({
         id: reviews._id,
+        author: reviews.author,
         title: reviews.title,
         recordTitle: reviews.recordTitle,
         theme: reviews.theme,
@@ -84,6 +86,7 @@ router.get("/:id", async (req, res) => {
 
     return res.json({
       id: review._id,
+      author: review.author,
       title: review.title,
       recordTitle: review.recordTitle,
       theme: review.theme,
@@ -99,6 +102,30 @@ router.get("/:id", async (req, res) => {
   }
 });
 
+router.post("/message/:id", async (req, res) => {
+  try {
+    const { sender, receiver, body } = req.body;
+    const id = req.params.id;
+    await Reviews.updateOne(
+      { _id: id },
+      {
+        $push: {
+          messages: {
+            sender: sender,
+            body: body,
+            date: new Date().toLocaleString("en-US", {
+              timeZone: "Europe/Minsk",
+            }),
+          },
+        },
+      }
+    );
+    return res.status(200).json();
+  } catch (e) {
+    res.status(500);
+  }
+});
+
 router.get("/highest-rating-reviews", async (req, res) => {
   try {
     const reviews = await Reviews.find();
@@ -106,6 +133,7 @@ router.get("/highest-rating-reviews", async (req, res) => {
       reviews
         .map((review) => ({
           id: review._id,
+          author: reviews.author,
           title: review.title,
           recordTitle: review.recordTitle,
           theme: review.theme,

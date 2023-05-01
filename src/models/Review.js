@@ -4,6 +4,7 @@ module.exports = mongoose.model(
   "Review",
   new mongoose.Schema({
     title: { type: String, required: true },
+    author: { type: String, required: true },
     recordTitle: { type: String, required: true },
     theme: { type: String, required: true },
     tags: [{ name: String }],
@@ -11,8 +12,6 @@ module.exports = mongoose.model(
     imgSrc: { type: String },
     rating: [{ value: Number, userId: String }],
     date: { type: String },
-    messages: [
-      { sender: String, receiver: String, body: String, date: String },
-    ],
+    messages: [{ sender: String, body: String, date: String }],
   })
 );

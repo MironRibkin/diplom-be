@@ -79,6 +79,32 @@ router.get("/user/:userId", async (req, res) => {
   }
 });
 
+router.get("/recent", async (req, res) => {
+  try {
+    const reviews = await Reviews.find().sort({ date: -1 }).limit(10);
+    console.log(reviews);
+    return res.json(
+      reviews.map((review) => {
+        return {
+          id: review._id,
+          author: review.author,
+          title: review.title,
+          recordTitle: review.recordTitle,
+          theme: review.theme,
+          tags: review.tags,
+          description: review.description,
+          imgSrc: review.imgSrc,
+          rating: review.rating,
+          date: review.date,
+          messages: review.messages,
+        };
+      })
+    );
+  } catch (error) {
+    res.status(500).json({ message: "Get reviews error", error });
+  }
+});
+
 router.get("/:id", async (req, res) => {
   try {
     const id = req.params.id;

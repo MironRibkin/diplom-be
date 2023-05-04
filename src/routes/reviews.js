@@ -54,6 +54,49 @@ router.put(
   }
 );
 
+router.post("/rating", async (req, res) => {
+  try {
+    const { reviewId, value, userId } = req.body;
+    await Reviews.updateOne(
+      { _id: reviewId },
+      {
+        $push: {
+          rating: {
+            value: value,
+            userId: userId,
+          },
+        },
+      }
+    );
+    return res.status(200).json();
+  } catch (e) {
+    res.status(500);
+  }
+});
+
+router.post("/:id", async (req, res) => {
+  try {
+    const id = req.params.id;
+    const { title, recordTitle, tags, theme, description, imgSrc } = req.body;
+    await Reviews.updateMany(
+      { _id: id },
+      {
+        $set: {
+          title,
+          recordTitle,
+          tags,
+          theme,
+          description,
+          imgSrc,
+        },
+      }
+    );
+    return res.status(200).json({ message: "Edit was created" });
+  } catch (error) {
+    res.status(500).json({ message: "Edit review error", error });
+  }
+});
+
 router.get("/user/:userId", async (req, res) => {
   try {
     const currentUser = await User.findOne({ _id: req.params.userId }).populate(
@@ -73,6 +116,68 @@ router.get("/user/:userId", async (req, res) => {
         rating: reviews.rating,
         date: reviews.date,
       }))
+    );
+  } catch (error) {
+    res.status(500).json({ message: "Get reviews error", error });
+  }
+});
+
+router.get("/all", async (req, res) => {
+  try {
+    const { search } = req.query;
+    console.log(search);
+    const reviews = await Reviews.find({ search });
+    return res.json(
+      reviews.map((review) => {
+        return {
+          id: review._id,
+          author: review.author,
+          title: review.title,
+          recordTitle: review.recordTitle,
+          theme: review.theme,
+          tags: review.tags,
+          description: review.description,
+          imgSrc: review.imgSrc,
+          rating: review.rating,
+          date: review.date,
+          messages: review.messages,
+        };
+      })
+    );
+  } catch (error) {
+    res.status(500).json({ message: "All reviews error", error });
+  }
+});
+
+router.get("/highest", async (req, res) => {
+  try {
+    const reviews = await Reviews.find().sort({ date: -1 }).limit(10);
+    console.log(reviews);
+    return res.json(
+      reviews
+        .map((review) => {
+          return {
+            id: review._id,
+            author: review.author,
+            title: review.title,
+            recordTitle: review.recordTitle,
+            theme: review.theme,
+            tags: review.tags,
+            description: review.description,
+            imgSrc: review.imgSrc,
+            rating: review.rating,
+            date: review.date,
+            messages: review.messages,
+          };
+        })
+        .sort(
+          (a, b) =>
+            b.rating.reduce((acc, { value }) => acc + value, 0) /
+              b.rating.length -
+            a.rating.reduce((acc, { value }) => acc + value, 0) /
+              a.rating.length
+        )
+        .slice(0, 10)
     );
   } catch (error) {
     res.status(500).json({ message: "Get reviews error", error });
@@ -149,37 +254,6 @@ router.post("/message/:id", async (req, res) => {
     return res.status(200).json();
   } catch (e) {
     res.status(500);
-  }
-});
-
-router.get("/highest-rating-reviews", async (req, res) => {
-  try {
-    const reviews = await Reviews.find();
-    return res.json(
-      reviews
-        .map((review) => ({
-          id: review._id,
-          author: reviews.author,
-          title: review.title,
-          recordTitle: review.recordTitle,
-          theme: review.theme,
-          tags: review.tags,
-          description: review.description,
-          imgSrc: review.imgSrc,
-          rating: review.rating,
-          date: review.date,
-        }))
-        .sort(
-          (a, b) =>
-            b.rating.reduce((acc, { value }) => acc + value, 0) /
-              b.rating.length -
-            a.rating.reduce((acc, { value }) => acc + value, 0) /
-              a.rating.length
-        )
-        .slice(0, 10)
-    );
-  } catch (error) {
-    res.status(500).json({ message: "Get review error", error });
   }
 });
 

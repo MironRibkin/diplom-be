@@ -23,14 +23,24 @@ router.put(
         });
       }
 
+      const {
+        title,
+        recordTitle,
+        tags,
+        theme,
+        description,
+        imgSrc,
+        rating,
+        author,
+      } = req.body;
+
       const currentUser = await User.findOne({
-        _id: jwt.verify(
-          req.headers.authorization.split(" ")[1],
-          process.env.JWT_SECRET
-        ).userId,
+        // _id: jwt.verify(
+        //   req.headers.authorization.split(" ")[1],
+        //   process.env.JWT_SECRET
+        // ).userId,
+        _id: author,
       });
-      const { title, recordTitle, tags, theme, description, imgSrc, rating } =
-        req.body;
       const review = await Reviews.create({
         title,
         author: currentUser.userName,

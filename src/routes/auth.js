@@ -86,7 +86,7 @@ router.post(
       console.log(password);
 
       const token = jwt.sign(
-        { userId: currentUser.id },
+        { userId: currentUser.id, role: currentUser.role },
         process.env.JWT_SECRET
       );
       console.log(process.env.JWT_SECRET);
@@ -125,6 +125,28 @@ router.get("/user", async (req, res) => {
       return res
         .status(401)
         .json({ message: "Your account has just been deleted." });
+    }
+    return res.json({
+      id: currentUser._id,
+      userName: currentUser.userName,
+      banned: currentUser.banned,
+      email: currentUser.email,
+      avatarSrc: currentUser.avatarSrc,
+      role: currentUser.role,
+    });
+  } catch (error) {
+    res.status(500).json({ message: "Refresh error", error });
+  }
+});
+
+router.get("/user/:id", async (req, res) => {
+  try {
+    const currentUser = await User.findOne({ _id: req.params.id });
+
+    if (!currentUser) {
+      return res
+        .status(401)
+        .json({ message: "This account has just been deleted." });
     }
     return res.json({
       id: currentUser._id,

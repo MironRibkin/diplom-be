@@ -35,10 +35,6 @@ router.put(
       } = req.body;
 
       const currentUser = await User.findOne({
-        // _id: jwt.verify(
-        //   req.headers.authorization.split(" ")[1],
-        //   process.env.JWT_SECRET
-        // ).userId,
         _id: author,
       });
       const review = await Reviews.create({

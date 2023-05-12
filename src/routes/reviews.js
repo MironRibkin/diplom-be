@@ -1,6 +1,5 @@
 const { Router } = require("express");
 const { check, validationResult } = require("express-validator");
-const jwt = require("jsonwebtoken");
 const User = require("../models/User");
 const Reviews = require("../models/Review");
 const router = Router();

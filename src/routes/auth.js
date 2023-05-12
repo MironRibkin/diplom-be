@@ -82,22 +82,22 @@ router.post(
           message: "Wrong password",
         });
       }
-      console.log(currentUser.id);
-      console.log(password);
 
       const token = jwt.sign(
         { userId: currentUser.id, role: currentUser.role },
         process.env.JWT_SECRET
       );
-      console.log(process.env.JWT_SECRET);
       currentUser.lastVisit = Date.now();
-      console.log(currentUser.id);
-
-      console.log(token);
 
       await currentUser.save();
-      console.log(currentUser);
-      res.json({ token, record: { ...currentUser, id: currentUser._id } });
+      res.json({
+        token,
+        record: {
+          ...currentUser,
+          id: currentUser._id,
+          banned: currentUser.banned,
+        },
+      });
     } catch (e) {
       res.status(401).json({ message: "Error login user" });
     }

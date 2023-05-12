@@ -25,5 +25,4 @@ const start = async () => {
     process.exit(1);
   }
 };
-console.log(process.env.PORT);
 start();

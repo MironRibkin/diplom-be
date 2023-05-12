@@ -130,7 +130,6 @@ router.get("/user/:userId", async (req, res) => {
 router.get("/all", async (req, res) => {
   try {
     const { search } = req.query;
-    console.log(search);
     const reviews = await Reviews.find({ search });
     return res.json(
       reviews.map((review) => {
@@ -157,7 +156,6 @@ router.get("/all", async (req, res) => {
 router.get("/highest", async (req, res) => {
   try {
     const reviews = await Reviews.find().sort({ date: -1 }).limit(10);
-    console.log(reviews);
     return res.json(
       reviews
         .map((review) => {
@@ -192,7 +190,6 @@ router.get("/highest", async (req, res) => {
 router.get("/recent", async (req, res) => {
   try {
     const reviews = await Reviews.find().sort({ date: -1 }).limit(10);
-    console.log(reviews);
     return res.json(
       reviews.map((review) => {
         return {
